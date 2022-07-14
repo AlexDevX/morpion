@@ -1,28 +1,57 @@
-let n = 0
-
-function render(){
-
-    const items = [
-        'Item 1',
-        'Item 2',
-        'Item 3'
-    ]
-
-    const lis = items.map((item, k) => <li key={k}>{item}</li>)
-
-    const title = <React.Fragment>
-    <h1>Bonjour les gens <span>{n}</span></h1>
-    <ul>
-        {lis}
-    </ul>
-    </React.Fragment>
-    
-    ReactDOM.render(title, document.querySelector('#app'))
+function WelcomeFunc ({name, children}) {
+    return <div>
+        <h1>Bonjour {name}</h1>
+        <p>{children}</p>
+    </div>
 }
 
-render()
+class Welcome extends React.Component {
 
-window.setInterval(() => {
-    n++
-    render()
-}, 1000)
+    render () {
+        return <div>
+            <h1>Bonjour {this.props.name}</h1>
+            <p>{this.props.children}</p>
+        </div>
+    }
+
+}
+
+class Minuteur extends React.Component {
+
+    constructor (props) {
+        super(props)
+        this.state = {current_time: props.time}
+        this.timer = null
+    }
+
+    componentDidMount () {
+        this.timer = window.setInterval(this.tick.bind(this),1000)
+    }
+
+    componentWillUnmount () {
+        window.clearInterval(this.timer)
+    }
+
+    tick () {
+        this.setState((state, props) => ({current_time: state.current_time - props.step}))
+    }
+
+    render () {
+        if(this.state.current_time <= 0){
+            window.clearInterval(this.timer)
+            return <div><h1>Temps écoulé</h1></div>
+        }else{
+            return <div>
+            <h1>{this.state.current_time}</h1>
+            </div>
+        }
+    }
+}
+
+Minuteur.defaultProps = {
+    time : 10,
+    step : 1
+}
+
+
+ReactDOM.render(<Minuteur time={100}/>, document.querySelector('#app'))
