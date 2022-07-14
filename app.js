@@ -1,11 +1,21 @@
 let n = 0
 
 function render(){
-    const title = React.createElement(
-        'h1',
-        {},
-        'Bonjour tout le monde ',
-        React.createElement('span',{}, n))
+
+    const items = [
+        'Item 1',
+        'Item 2',
+        'Item 3'
+    ]
+
+    const lis = items.map((item, k) => <li key={k}>{item}</li>)
+
+    const title = <React.Fragment>
+    <h1>Bonjour les gens <span>{n}</span></h1>
+    <ul>
+        {lis}
+    </ul>
+    </React.Fragment>
     
     ReactDOM.render(title, document.querySelector('#app'))
 }
